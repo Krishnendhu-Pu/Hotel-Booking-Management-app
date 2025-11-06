@@ -17,4 +17,5 @@ public class Booking {
     private String roomType;
     private LocalDateTime bookingDate;
     private String status;
+
 }
