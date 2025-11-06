@@ -16,5 +16,5 @@ public class Booking {
     private String customerName;
     private String roomType;
     private LocalDateTime bookingDate;
-    private String status; //hi
+    private String status;
 }
