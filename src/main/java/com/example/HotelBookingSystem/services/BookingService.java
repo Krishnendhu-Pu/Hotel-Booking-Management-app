@@ -10,5 +10,5 @@ public interface BookingService {
     List<BookingResponse> getAllBookings();
     BookingResponse getBookingById(int id);
     BookingResponse updateBooking(int id, BookingRequest request);
-    void deleteBooking();
+    void deleteBooking(int id);
 }
