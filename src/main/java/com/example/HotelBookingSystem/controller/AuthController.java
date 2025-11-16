@@ -22,4 +22,6 @@ public class AuthController {
             return ResponseEntity.ok().build();
             return ResponseEntity.badRequest().build();
         }
+
+        @PostMapping("/login")
 }
