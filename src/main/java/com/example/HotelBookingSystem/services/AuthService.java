@@ -63,7 +63,7 @@ public class AuthService {
         mailSender.send(message);
     }
 
-    public boolean verofyToken(String email, String otp){
+    public boolean verofyOtp(String email, String otp){
         User user = userRepository.findByEmail(email)
                 .orElseThrow(()-> new RuntimeException("email not found"));
         if(!otp.equals(user.getOtp())){
