@@ -40,6 +40,7 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordDTO forgotPasswordDTO){
+        System.out.println("In forgot password controller");
     authService.sentOtp(forgotPasswordDTO.email());
     return ResponseEntity.ok("otp sent to email");
     }

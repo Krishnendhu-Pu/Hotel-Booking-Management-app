@@ -49,8 +49,10 @@ public class AuthService {
     }
 
     public void sentOtp(String email){
+        System.out.println("In sentOtp");
         User user = userRepository.findByEmail(email)
                 .orElseThrow(()->new RuntimeException("Email not found"));
+        System.out.println("In sentOtp2");
         String otp = String.valueOf((int) Math.random() * 900000 + 100000);
         user.setOtp(otp);
         user.setOtpExpiry(LocalDateTime.now().plusMinutes(5));
