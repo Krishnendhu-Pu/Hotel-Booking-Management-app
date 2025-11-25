@@ -3,6 +3,7 @@ package com.example.HotelBookingSystem.services;
 import com.example.HotelBookingSystem.dto.BookingRequest;
 import com.example.HotelBookingSystem.dto.BookingResponse;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface BookingService {
@@ -11,4 +12,5 @@ public interface BookingService {
     BookingResponse getBookingById(int id);
     BookingResponse updateBooking(int id, BookingRequest request);
     void deleteBooking(int id);
+    List<BookingResponse> getBookingByDateRange(LocalDate startDate, LocalDate endDate);
 }

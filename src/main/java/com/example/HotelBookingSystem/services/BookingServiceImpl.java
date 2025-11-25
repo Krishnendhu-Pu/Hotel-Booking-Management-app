@@ -6,6 +6,10 @@ import com.example.HotelBookingSystem.entity.Booking;
 import com.example.HotelBookingSystem.repository.BookingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,7 +60,16 @@ public class BookingServiceImpl implements BookingService {
     public void deleteBooking( int id){
         bookingRepository.deleteById(id);
     }
+    public List<BookingResponse> getBookingByDateRange(LocalDate startDate, LocalDate endDate){
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
 
+        return bookingRepository.findBookingByDateRange(startDateTime, endDateTime)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+
+    }
     public BookingResponse mapToResponse(Booking booking){
         return BookingResponse.builder()
                 .id(booking.getId())
@@ -66,4 +79,6 @@ public class BookingServiceImpl implements BookingService {
                 .status(booking.getStatus())
                 .build();
     }
+
+
 }
