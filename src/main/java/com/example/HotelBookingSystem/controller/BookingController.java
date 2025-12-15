@@ -5,11 +5,13 @@ import com.example.HotelBookingSystem.dto.BookingRequest;
 import com.example.HotelBookingSystem.dto.BookingResponse;
 import com.example.HotelBookingSystem.services.BookingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -28,6 +30,16 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<List<BookingResponse>> getAllBookings(){
         return ResponseEntity.ok(bookingService.getAllBookings());
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<BookingResponse>> getBookingByDateRange(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate){
+        if(endDate == null){
+            endDate = startDate; // for single day
+        }
+        return ResponseEntity.ok(bookingService.getBookingByDateRange(startDate,endDate));
     }
 
     @GetMapping("/{id}")

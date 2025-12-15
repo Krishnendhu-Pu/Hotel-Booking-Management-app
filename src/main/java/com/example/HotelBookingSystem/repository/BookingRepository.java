@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
-    @Query("SELECT b FROM Booking b WHERE DATE(b.bookingDate) BETWEEN :startDate AND :endDate ORDER BY b.bookingDate DESC")
-    List<Booking> findBookingByDateRange(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+    @Query("SELECT b FROM Booking b WHERE b.bookingDate BETWEEN :startDate AND :endDate ORDER BY b.bookingDate DESC")
+    List<Booking> findBookingByDateRange(LocalDateTime startDate, LocalDateTime endDate);
 
 }

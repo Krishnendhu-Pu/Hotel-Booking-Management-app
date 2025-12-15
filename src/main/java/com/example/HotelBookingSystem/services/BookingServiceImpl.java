@@ -60,6 +60,7 @@ public class BookingServiceImpl implements BookingService {
     public void deleteBooking( int id){
         bookingRepository.deleteById(id);
     }
+
     public List<BookingResponse> getBookingByDateRange(LocalDate startDate, LocalDate endDate){
         LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
