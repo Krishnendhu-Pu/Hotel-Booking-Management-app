@@ -2,10 +2,15 @@ package com.example.HotelBookingSystem.services;
 
 import com.example.HotelBookingSystem.dto.BookingRequest;
 import com.example.HotelBookingSystem.dto.BookingResponse;
+import com.example.HotelBookingSystem.dto.RoomsRequestDTO;
+import com.example.HotelBookingSystem.dto.RoomsResponseDTO;
 import com.example.HotelBookingSystem.entity.Booking;
 import com.example.HotelBookingSystem.repository.BookingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
+    private final WebClient webClient;
     private final BookingRepository bookingRepository;
 
     @Override
@@ -71,6 +77,26 @@ public class BookingServiceImpl implements BookingService {
                 .collect(Collectors.toList());
 
     }
+
+    public Mono<String> addRoomViaRoomService(RoomsRequestDTO roomsRequestDTO){
+
+        return webClient.post()
+                .uri("http://localhost:8081/api/rooms")
+                .bodyValue(roomsRequestDTO)
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
+    public List<RoomsResponseDTO> getRooms(){
+
+        return webClient.get()
+                .uri("http://localhost:8081/api/rooms/roomslist")
+                .retrieve()
+                .bodyToFlux(RoomsResponseDTO.class)
+                .collectList()
+                .block();
+    }
+
     public BookingResponse mapToResponse(Booking booking){
         return BookingResponse.builder()
                 .id(booking.getId())

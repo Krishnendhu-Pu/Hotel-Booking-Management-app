@@ -3,13 +3,17 @@ package com.example.HotelBookingSystem.controller;
 
 import com.example.HotelBookingSystem.dto.BookingRequest;
 import com.example.HotelBookingSystem.dto.BookingResponse;
+import com.example.HotelBookingSystem.dto.RoomsRequestDTO;
+import com.example.HotelBookingSystem.dto.RoomsResponseDTO;
 import com.example.HotelBookingSystem.services.BookingService;
 import lombok.RequiredArgsConstructor;
+import org.antlr.v4.runtime.misc.FlexibleHashMap;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,6 +31,11 @@ public class BookingController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PostMapping("/rooms")
+    public Mono<String> addRooms(@RequestBody RoomsRequestDTO roomsRequestDTO){
+        return bookingService.addRoomViaRoomService(roomsRequestDTO);
+    }
+
     @GetMapping
     public ResponseEntity<List<BookingResponse>> getAllBookings(){
         return ResponseEntity.ok(bookingService.getAllBookings());
@@ -40,6 +49,10 @@ public class BookingController {
             endDate = startDate; // for single day
         }
         return ResponseEntity.ok(bookingService.getBookingByDateRange(startDate,endDate));
+    }
+    @GetMapping("/roomslist")
+    public List<RoomsResponseDTO> getRooms(){
+        return bookingService.getRooms();
     }
 
     @GetMapping("/{id}")

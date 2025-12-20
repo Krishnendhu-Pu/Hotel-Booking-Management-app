@@ -5,5 +5,5 @@ import jakarta.validation.constraints.NotEmpty;
 public record RoomsRequestDTO(@NotEmpty String roomType,
                               int rate,
                               String remarks,
-                              int numOfRooms) {
+                              int noOfRooms) {
 }
