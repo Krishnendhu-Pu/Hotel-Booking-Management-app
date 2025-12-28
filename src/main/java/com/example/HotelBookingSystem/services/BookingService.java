@@ -18,4 +18,5 @@ public interface BookingService {
     List<BookingResponse> getBookingByDateRange(LocalDate startDate, LocalDate endDate);
     Mono<String> addRoomViaRoomService(RoomsRequestDTO roomsRequestDTO);
     List<RoomsResponseDTO> getRooms();
+   
 }
