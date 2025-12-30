@@ -1,9 +1,13 @@
 package com.example.HotelBookingSystem.dto;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public record RoomsRequestDTO(@NotEmpty String roomType,
-                              int rate,
+                              @NotNull int rate,
+                              Integer gstPercent,
+                              Integer acRate,
+                              Integer extraBedFee,
                               String remarks,
-                              int noOfRooms) {
+                              @NotNull int noOfRooms) {
 }
