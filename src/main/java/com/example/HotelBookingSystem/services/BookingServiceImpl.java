@@ -1,11 +1,9 @@
 package com.example.HotelBookingSystem.services;
 
-import com.example.HotelBookingSystem.dto.BookingRequest;
-import com.example.HotelBookingSystem.dto.BookingResponse;
-import com.example.HotelBookingSystem.dto.RoomsRequestDTO;
-import com.example.HotelBookingSystem.dto.RoomsResponseDTO;
+import com.example.HotelBookingSystem.dto.*;
 import com.example.HotelBookingSystem.entity.Booking;
 import com.example.HotelBookingSystem.repository.BookingRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,18 +22,66 @@ public class BookingServiceImpl implements BookingService {
 
     private final WebClient webClient;
     private final BookingRepository bookingRepository;
+    private final ObjectMapper objectMapper;
 
     @Override
     public BookingResponse createBooking(BookingRequest request){
-       Booking booking = Booking.builder()
-               .customerName(request.getCustomerName())
-               .roomType(request.getRoomType())
-               .bookingDate(request.getBookingDate())
-               .status(request.getStatus())
-               .build();
-       Booking saved = bookingRepository.save(booking);
-       return mapToResponse(saved);
+        try{
+        Booking booking = Booking.builder()
+                .customerName(request.getCustomerName())
+                .pax(request.getPax())
+                .mobile(request.getMobile())
+                .checkIn(request.getCheckIn())
+                .checkOut(request.getCheckOut())
+                .roomsJson(objectMapper.writeValueAsString(request.getRooms()))
+                .advance(request.getAdvance())
+                .advanceMode(request.getAdvanceMode())
+                .kitchenRent(request.getKitchenRent())
+                .discount(request.getDiscount())
+                .gst(request.isGst())
+                .gstAmount(request.getGstAmount())
+                .totalAmount(request.getTotalAmount())
+                .balanceAmount(request.getBalanceAmount())
+                .remarks(request.getRemarks())
+                .status("CONFIRMED")
+                .createdAt(LocalDateTime.now())
+                .build();
 
+        Booking saved = bookingRepository.save(booking);
+
+        return mapToResponse(saved);
+
+    } catch (Exception e) {
+        throw new RuntimeException("Failed to save booking", e);
+    }
+
+    }
+    public BookingResponse updateBooking(int id, BookingRequest request){
+        try {
+            Booking booking = bookingRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Booking not found " + id));
+            booking.setCustomerName(request.getCustomerName());
+            booking.setPax(request.getPax());
+            booking.setMobile(request.getMobile());
+            booking.setCheckIn(request.getCheckIn());
+            booking.setCheckOut(request.getCheckOut());
+            booking.setRoomsJson(objectMapper.writeValueAsString(request.getRooms()));
+            booking.setAdvance(request.getAdvance());
+            booking.setAdvanceMode(request.getAdvanceMode());
+            booking.setKitchenRent(request.getKitchenRent());
+            booking.setDiscount(request.getDiscount());
+            booking.setGst(request.isGst());
+            booking.setGstAmount(request.getGstAmount());
+            booking.setTotalAmount(request.getTotalAmount());
+            booking.setBalanceAmount(request.getBalanceAmount());
+            booking.setRemarks(request.getRemarks());
+            booking.setStatus(request.getStatus());
+            booking.setCreatedAt(LocalDateTime.now());
+            Booking updated = bookingRepository.save(booking);
+            return mapToResponse(updated);
+        }catch (Exception e){
+            throw new RuntimeException("Failed to update booking", e);
+        }
     }
     @Override
     public List<BookingResponse> getAllBookings(){
@@ -51,16 +97,7 @@ public class BookingServiceImpl implements BookingService {
 
     }
 
-    public BookingResponse updateBooking(int id, BookingRequest request){
-        Booking booking = bookingRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Booking not found "+id));
-        booking.setCustomerName(request.getCustomerName());
-        booking.setRoomType(request.getRoomType());
-        booking.setBookingDate(request.getBookingDate());
-        booking.setStatus(request.getStatus());
-        Booking updated = bookingRepository.save(booking);
-        return mapToResponse(updated);
-    }
+
 
     @Override
     public void deleteBooking( int id){
@@ -98,13 +135,38 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public BookingResponse mapToResponse(Booking booking){
-        return BookingResponse.builder()
-                .id(booking.getId())
-                .customerName(booking.getCustomerName())
-                .roomType(booking.getRoomType())
-                .bookingDate(booking.getBookingDate())
-                .status(booking.getStatus())
-                .build();
+
+
+        try {
+            List<RoomDTO> rooms =
+                    objectMapper.readValue(
+                            booking.getRoomsJson(),
+                            objectMapper.getTypeFactory()
+                                    .constructCollectionType(List.class, RoomDTO.class)
+                    );
+            return BookingResponse.builder()
+                    .id(booking.getId())
+                    .customerName(booking.getCustomerName())
+                    .pax(booking.getPax())
+                    .mobile(booking.getMobile())
+                    .checkIn(booking.getCheckIn())
+                    .checkOut(booking.getCheckOut())
+                    .rooms(rooms)
+                    .advance(booking.getAdvance())
+                    .advanceMode(booking.getAdvanceMode())
+                    .kitchenRent(booking.getKitchenRent())
+                    .discount(booking.getDiscount())
+                    .gst(booking.isGst())
+                    .gstAmount(booking.getGstAmount())
+                    .totalAmount(booking.getTotalAmount())
+                    .balanceAmount(booking.getBalanceAmount())
+                    .remarks(booking.getRemarks())
+                    .status(booking.getStatus())
+                    .createdAt(booking.getCreatedAt())
+                    .build();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse room data", e);
+        }
     }
 
 

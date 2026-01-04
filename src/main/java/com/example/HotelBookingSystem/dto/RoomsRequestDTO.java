@@ -5,9 +5,10 @@ import jakarta.validation.constraints.NotNull;
 
 public record RoomsRequestDTO(@NotEmpty String roomType,
                               @NotNull int rate,
-                              Integer gstPercent,
-                              Integer acRate,
-                              Integer extraBedFee,
+                              Double gstPercent,
+                              Double acRate,
+                              Double extraBedFee,
                               String remarks,
+                              boolean ac,
                               @NotNull int noOfRooms) {
 }
