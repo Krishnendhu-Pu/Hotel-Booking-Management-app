@@ -38,12 +38,13 @@ public class BookingServiceImpl implements BookingService {
                 .advanceMode(request.getAdvanceMode())
                 .kitchenRent(request.getKitchenRent())
                 .discount(request.getDiscount())
-                .gst(request.isGst())
+                .gst(Boolean.TRUE.equals(request.getGst()) ? 1 : 0)
                 .gstAmount(request.getGstAmount())
                 .totalAmount(request.getTotalAmount())
                 .balanceAmount(request.getBalanceAmount())
                 .remarks(request.getRemarks())
                 .status("CONFIRMED")
+                .paymentCompleted(Boolean.TRUE.equals(request.getPaymentCompleted()) ? 1 : 0)
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -70,12 +71,13 @@ public class BookingServiceImpl implements BookingService {
             booking.setAdvanceMode(request.getAdvanceMode());
             booking.setKitchenRent(request.getKitchenRent());
             booking.setDiscount(request.getDiscount());
-            booking.setGst(request.isGst());
+            booking.setGst(Boolean.TRUE.equals(request.getGst()) ? 1 : 0);
             booking.setGstAmount(request.getGstAmount());
             booking.setTotalAmount(request.getTotalAmount());
             booking.setBalanceAmount(request.getBalanceAmount());
             booking.setRemarks(request.getRemarks());
-            booking.setStatus(request.getStatus());
+            booking.setPaymentCompleted(Boolean.TRUE.equals(request.getPaymentCompleted()) ? 1 : 0);
+            booking.setStatus(request.getStatus() != null ? request.getStatus() : "CONFIRMED");
             booking.setCreatedAt(LocalDateTime.now());
             Booking updated = bookingRepository.save(booking);
             return mapToResponse(updated);
@@ -156,11 +158,12 @@ public class BookingServiceImpl implements BookingService {
                     .advanceMode(booking.getAdvanceMode())
                     .kitchenRent(booking.getKitchenRent())
                     .discount(booking.getDiscount())
-                    .gst(booking.isGst())
+                    .gst(booking.getGst() != null && booking.getGst() == 1)
                     .gstAmount(booking.getGstAmount())
                     .totalAmount(booking.getTotalAmount())
                     .balanceAmount(booking.getBalanceAmount())
                     .remarks(booking.getRemarks())
+                    .paymentCompleted(booking.getPaymentCompleted() !=null && booking.getPaymentCompleted() == 1)
                     .status(booking.getStatus())
                     .createdAt(booking.getCreatedAt())
                     .build();

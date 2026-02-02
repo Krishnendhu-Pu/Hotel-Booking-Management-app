@@ -31,6 +31,7 @@ public class BookingResponse {
     private double discount;
 
     private boolean gst;
+    private boolean paymentCompleted;
     private double gstAmount;
 
     private double totalAmount;

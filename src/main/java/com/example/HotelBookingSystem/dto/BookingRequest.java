@@ -23,11 +23,11 @@ public class BookingRequest {
     private double kitchenRent;
     private double discount;
 
-    private boolean gst;
+    private Boolean gst;
     private double gstAmount;
     private double totalAmount;
     private double balanceAmount;
-
+    private Boolean paymentCompleted;
     private String remarks;
     private String status;
 }

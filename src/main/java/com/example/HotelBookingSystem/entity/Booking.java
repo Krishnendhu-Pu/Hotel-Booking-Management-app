@@ -21,15 +21,20 @@ public class Booking {
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
+    @Column(name = "ROOMS_JSON")
     private String roomsJson;
+
 
     private double advance;
     private String advanceMode;
     private double kitchenRent;
     private double discount;
 
-    private boolean gst;
+    @Column(name = "GST")
+    private Integer gst; // 0 or 1
+
+
     private double gstAmount;
 
     private double totalAmount;
@@ -37,6 +42,9 @@ public class Booking {
 
     private String remarks;
     private String status;
+
+    @Column(name = "paymentCompleted")
+    private Integer paymentCompleted;
 
     private LocalDateTime createdAt;
 }

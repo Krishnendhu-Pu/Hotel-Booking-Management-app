@@ -30,7 +30,6 @@ public class BookingController {
         BookingResponse response = bookingService.createBooking(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
     @PostMapping("/rooms")
     public Mono<String> addRooms(@RequestBody RoomsRequestDTO roomsRequestDTO){
         return bookingService.addRoomViaRoomService(roomsRequestDTO);
